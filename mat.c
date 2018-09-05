@@ -4,7 +4,7 @@
 #include <time.h>
 
 #ifdef SXVE
-#define IBL  256
+#define IBL  255
 // 48GB = 8(double) * 3(Matrix) * 2 * 1024 * 1024 * 1024 = 8 * 3 * (1.414 * 32 * 1024)^2
 //       = 8(double) * 3 * (46333)^2
 // 46000/128 = 359

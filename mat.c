@@ -3,11 +3,18 @@
 #include <math.h>
 #include <time.h>
 
+#ifdef SXVE
 #define IBL  256
 // 48GB = 8(double) * 3(Matrix) * 2 * 1024 * 1024 * 1024 = 8 * 3 * (1.414 * 32 * 1024)^2
 //       = 8(double) * 3 * (46333)^2
-// #define NMAT (long)46000
+// 46000/128 = 359
+// 46000/256 = 179
+//
+#define NMAT (long)(IBL * 17)
+#else // SXVE
+#define IBL  10
 #define NMAT (long)600
+#endif
 #define NLOOP 1
 
 double a[NMAT][NMAT], b[NMAT][NMAT], c[NMAT][NMAT];
@@ -22,11 +29,11 @@ main()
     double elapse, sum;
     clock_t start, now;
     /* srand(12345678); */
-    printf("Matrix size %d * %d, %lf GFlop, setting up... \n", NMAT, NMAT, gcalc);
+    printf("Matrix size %d * %d Block=%d, %lf GFlop, setting up... \n", NMAT, NMAT, IBL, gcalc);
     start = clock();
     setup(a, b);
     now = clock();
-    printf("Setup took %.3lf\n", (double)(now - start)/CLOCKS_PER_SEC);
+    printf("Setup took %.3lf sec\n", (double)(now - start)/CLOCKS_PER_SEC);
     start = now;
     for (n = 0; n < NLOOP; n++) {
         printf("%d, ", n);
@@ -34,14 +41,14 @@ main()
     }
     now = clock();
     elapse = (double)(now - start)/CLOCKS_PER_SEC;
-    printf("\n%d loops of MatMul took %.3lf = %lf GFlops\n", elapse, gcalc/elapse);
+    printf("\n%d loops of MatMul took %.3lf sec => %lf GFlops\n", NLOOP, elapse, gcalc/elapse);
     // sumup matrix C to avoid optimizer remove all the calculation
     // maybe OK because calculating external matrix.
     start = now;
     sum = sumup(); 
     now = clock();
     elapse = (double)(now - start)/CLOCKS_PER_SEC;
-    printf("sum of C is %lf, took %.3lf, %lf GFlops\n", sum, elapse, gcalcsum/elapse);
+    printf("sum of C is %lf, took %.3lf sec => %lf GFlops\n", sum, elapse, gcalcsum/elapse);
 }
 
 setup()
@@ -67,9 +74,9 @@ matmul()
     for (ib = 0; ib < NMAT; ib += IBL) {
         for (jb = 0; jb < NMAT; jb += IBL) {
             for (kb = 0; kb < NMAT; kb += IBL) {
-                for (i=ib; i < ib + IBL; i++) {
-                    for (j=jb; j < jb + IBL; j++) {
-                        for (k=kb; k < kb + IBL; k++) {
+                for (i = ib; i < (ib + IBL); i++) {
+                    for (j = jb; j < (jb + IBL); j++) {
+                        for (k = kb; k < (kb + IBL); k++) {
                             c[i][j] += a[i][k] * b[k][j];                              
                         }
                     }

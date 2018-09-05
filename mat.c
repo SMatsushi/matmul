@@ -37,7 +37,7 @@ main()
     /* srand(12345678); */
     printf("Matrix size %d * %d Block=%d, %lf GFlop, setting up... \n", NMAT, NMAT, IBL, gcalc);
     start = clock();
-    setup(a, b);
+    setup();
     now = clock();
     printf("Setup took %.3lf sec\n", (double)(now - start)/CLOCKS_PER_SEC);
     start = now;

@@ -6,4 +6,4 @@ mat: mat.o
 lmat: mat.c
 	$(CC) $(CFLAGS) $(BIGFLAGS) -o $@ $< 
 clean:
-	/bin/rm -f mat lmat amat apmat alpmat ftrace.out mat.o 
+	/bin/rm -f mat lmat amat apmat alpmat afmat apfmat alpfmat alptmat alpmat ftrace.out mat.o 

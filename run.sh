@@ -3,11 +3,20 @@
 source /opt/nec/ve/mpi/1.1.0/bin/necmpivars.sh
 
 # ./amat
-ve_exec -N 1 amat
-ftrace -f ftrace.out
+for cmd in \
+    "ve_exec -N 1 afmat"\
+    "./apfmat"\
+    "./alpfmat"\
+    "env VE_PROGINF=YES ./alptmat"\
+    "./alpmat"
+    do
+        rm -f ./ftrace.out
+        echo $cmd
+        time $cmd
+        echo
+        if [ -f ./ftrace.out ]; then
+              ftrace -f ./ftrace.out
+        fi
+        echo '----------------------'
+done  
 
-./apmat
-ftrace -f ftrace.out
-
-./alpmat
-ftrace -f ftrace.out

@@ -3,21 +3,27 @@
 #include <math.h>
 #include <time.h>
 
+#ifdef SXLG
+#define NBLKS 80
+#else  // SXLG
+#define NBLKS 20
+#endif // SXLG
+
 #ifdef SXVE
-#define IBL  255
+#define IBL  256
 // 48GB = 8(double) * 3(Matrix) * 2 * 1024 * 1024 * 1024 = 8 * 3 * (1.414 * 32 * 1024)^2
 //       = 8(double) * 3 * (46333)^2
 // 46000/128 = 359
 // 46000/256 = 179
-//
-#define NMAT (long)(IBL * 17)
 #else // SXVE
-#define IBL  10
-#define NMAT (long)600
-#endif
+#define IBL  16
+#endif // SXVE
+
+#define NMAT ((long)(IBL * NBLKS))
+#define NMATC (NMAT + 1)        // making it odd to prevent cache line conflicts
 #define NLOOP 1
 
-double a[NMAT][NMAT], b[NMAT][NMAT], c[NMAT][NMAT];
+double a[NMAT][NMATC], b[NMAT][NMATC], c[NMAT][NMATC];
 double sumup();
 main()
 {

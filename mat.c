@@ -22,38 +22,46 @@
 #define NMAT ((long)(IBL * NBLKS))
 #define NMATC (NMAT + 1)        // making it odd to prevent cache line conflicts
 #define NLOOP 1
+#define GIGA ((double)1000000000)
 
 double a[NMAT][NMATC], b[NMAT][NMATC], c[NMAT][NMATC];
 double sumup();
-main()
+main(int ac, char **av)
 {
     long ncalc = 2 * NMAT * NMAT * NMAT * NLOOP;
     long ncalcsum = NMAT * NMAT;
     int n;
-    double gcalc = ((double)ncalc) / 1000.0 / 1000.0 / 1000.0;
-    double gcalcsum = ((double)ncalcsum) / 1000.0 / 1000.0 / 1000.0;
+    double gcalc = ((double)ncalc) / GIGA;
+    double gcalcsum = ((double)ncalcsum) / GIGA;
     double elapse, sum;
     clock_t start, now;
-    /* srand(12345678); */
-    printf("Matrix size %d * %d Block=%d, %lf GFlop, setting up... \n", NMAT, NMAT, IBL, gcalc);
+    int nth;
+
+    if (ac > 1) {
+        nth = atoi(av[1]);
+    } else {
+        nth = 1;
+    }
+
+    printf("Matrix size %d * %d Block=%d, %lf GFlop, %d threads, setting up... \n", NMAT, NMAT, IBL, gcalc, nth);
     start = clock();
     setup();
     now = clock();
-    printf("Setup took %.3lf sec\n", (double)(now - start)/CLOCKS_PER_SEC);
+    printf("Setup took %.3lf sec\n", (double)(now - start)/CLOCKS_PER_SEC/nth);
     start = now;
     for (n = 0; n < NLOOP; n++) {
         printf("%d, ", n);
         matmul();
     }
     now = clock();
-    elapse = (double)(now - start)/CLOCKS_PER_SEC;
+    elapse = (double)(now - start)/CLOCKS_PER_SEC/nth;
     printf("\n%d loops of MatMul took %.3lf sec => %lf GFlops\n", NLOOP, elapse, gcalc/elapse);
     // sumup matrix C to avoid optimizer remove all the calculation
     // maybe OK because calculating external matrix.
     start = now;
     sum = sumup(); 
     now = clock();
-    elapse = (double)(now - start)/CLOCKS_PER_SEC;
+    elapse = (double)(now - start)/CLOCKS_PER_SEC/nth;
     printf("sum of C is %lf, took %.3lf sec => %lf GFlops\n", sum, elapse, gcalcsum/elapse);
 }
 

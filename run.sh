@@ -6,9 +6,9 @@ source /opt/nec/ve/mpi/1.1.0/bin/necmpivars.sh
 for cmd in \
     "ve_exec -N 1 afmat"\
     "./apfmat"\
-    "./alpfmat"\
-    "env VE_PROGINF=YES ./alptmat"\
-    "./alpmat"
+    "./alpfmat 8"\
+    "env VE_PROGINF=YES ./alptmat 8"\
+    "./alpmat 8"
     do
         rm -f ./ftrace.out
         echo $cmd

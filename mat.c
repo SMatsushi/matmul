@@ -20,7 +20,8 @@
 #endif // SXVE
 
 #define NMAT ((long)(IBL * NBLKS))
-#define NMATC (NMAT + 1)        // making it odd to prevent cache line conflicts
+#define NMSKEW 0 
+#define NMATC (NMAT + NMSKEW)        // making it odd to prevent cache line conflicts
 #define NLOOP 1
 #define GIGA ((double)1000000000)
 
@@ -43,7 +44,7 @@ main(int ac, char **av)
         nth = 1;
     }
 
-    printf("Matrix size %d * %d Block=%d, %lf GFlop, %d threads, setting up... \n", NMAT, NMAT, IBL, gcalc, nth);
+    printf("Matrix size %d * %d Block=%d NMskew=%d, %lf GFlop, %d threads, setting up... \n", NMAT, NMAT, IBL, NMSKEW, gcalc, nth);
     start = clock();
     setup();
     now = clock();

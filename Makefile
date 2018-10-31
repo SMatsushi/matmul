@@ -1,3 +1,10 @@
+# Makefile for
+#   Blocked dense matrix multiplication
+#  (C) 2018 NEC Enterprise Communication Tech. Inc
+#
+# This software is provided "as is" without warranty of any kind.
+#
+
 CFLAGS = -O3 -lm
 BIGFLAGS = -DSXVE
 all: mat lmat

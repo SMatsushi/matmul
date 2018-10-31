@@ -1,4 +1,11 @@
 #!/bin/sh
+#
+# Compile script for
+#   Blocked dense matrix multiplication
+#  (C) 2018 NEC Enterprise Communication Tech. Inc
+#
+# This software is provided "as is" without warranty of any kind.
+#
 
 source /opt/nec/ve/mpi/1.1.0/bin/necmpivars.sh
 

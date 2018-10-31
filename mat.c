@@ -1,3 +1,11 @@
+/* 
+ * Blocked dense matrix multiplication
+ * (C) 2018 NEC Enterprise Communication Tech. Inc
+ *
+ * This software is provided "as is" without warranty of any kind.
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -20,7 +28,7 @@
 #endif // SXVE
 
 #define NMAT ((long)(IBL * NBLKS))
-#define NMSKEW 0 
+#define NMSKEW 17 
 #define NMATC (NMAT + NMSKEW)        // making it odd to prevent cache line conflicts
 #define NLOOP 1
 #define GIGA ((double)1000000000)
